@@ -1,6 +1,6 @@
 # acme-lego-cron
 
-[![github-actions](https://github.com/brahma-dev/acme-lego-cron/workflows/build/badge.svg)](https://github.com/brahma-dev/acme-lego-cron/actions)
+[![github-actions](https://github.com/zen3515/acme-lego-cron/workflows/build/badge.svg)](https://github.com/zen3515/acme-lego-cron/actions)
 
 Dockerized [Lego](https://go-acme.github.io/lego/) with cron. Caters to DNS ACME challenge; other challenges can be worked out using `LEGO_ARGS`.
 
@@ -16,7 +16,7 @@ Environment variables are used to control various steps of the automation proces
 | `KEY_TYPE` | `ec384` | Type of key. | `--key-type`
 | `DOMAINS` | `""` | Domains (delimited by ';' ) | `--domains`, `-d`
 | `EMAIL_ADDRESS` | `""` | Email used for registration and recovery contact. | `--email`, `-m`
-| `PROVIDER` | `""` | DNS Provider. Valid values are: `acmedns`, `alidns`, `arvancloud`, `auroradns`, `autodns`, `azure`, `bindman`, `bluecat`, `checkdomain`, `clouddns`, `cloudflare`, `cloudns`, `cloudxns`, `conoha`, `constellix`, `desec`, `designate`, `digitalocean`, `dnsimple`, `dnsmadeeasy`, `dnspod`, `dode`, `dreamhost`, `duckdns`, `dyn`, `dynu`, `easydns`, `edgedns`, `exec`, `exoscale`, `fastdns`, `gandi`, `gandiv5`, `gcloud`, `glesys`, `godaddy`, `hetzner`, `hostingde`, `httpreq`, `iij`, `internal`, `inwx`, `joker`, `lightsail`, `linode`, `linodev4`, `liquidweb`, `luadns`, `mydnsjp`, `mythicbeasts`, `namecheap`, `namedotcom`, `namesilo`, `netcup`, `netlify`, `nifcloud`, `ns1`, `oraclecloud`, `otc`, `ovh`, `pdns`, `rackspace`, `regru`, `rfc2136`, `rimuhosting`, `route53`, `sakuracloud`, `scaleway`, `selectel`, `servercow`, `stackpath`, `transip`, `vegadns`, `versio`, `vscale`, `vultr`, `yandex`, `zoneee`, `zonomi`  | `--dns`
+| `PROVIDER` | `""` | DNS Provider. Valid values are: `acme-dns`, `alidns`, `arvancloud`, `auroradns`, `autodns`, `azure`, `bindman`, `bluecat`, `checkdomain`, `clouddns`, `cloudflare`, `cloudns`, `cloudxns`, `conoha`, `constellix`, `desec`, `designate`, `digitalocean`, `dnsimple`, `dnsmadeeasy`, `dnspod`, `dode`, `dreamhost`, `duckdns`, `dyn`, `dynu`, `easydns`, `edgedns`, `exec`, `exoscale`, `fastdns`, `gandi`, `gandiv5`, `gcloud`, `glesys`, `godaddy`, `hetzner`, `hostingde`, `httpreq`, `iij`, `internal`, `inwx`, `joker`, `lightsail`, `linode`, `linodev4`, `liquidweb`, `luadns`, `mydnsjp`, `mythicbeasts`, `namecheap`, `namedotcom`, `namesilo`, `netcup`, `netlify`, `nifcloud`, `ns1`, `oraclecloud`, `otc`, `ovh`, `pdns`, `rackspace`, `regru`, `rfc2136`, `rimuhosting`, `route53`, `sakuracloud`, `scaleway`, `selectel`, `servercow`, `stackpath`, `transip`, `vegadns`, `versio`, `vscale`, `vultr`, `yandex`, `zoneee`, `zonomi`  | `--dns`
 | `DNS_TIMEOUT` | `10` | Set the DNS timeout value to a specific value in seconds. | `--dns-timeout`.
 | `LEGO_ARGS` | `""` | Send arguments directly to lego, e.g. `"--dns.disable-cp"` or `"--dns.resolvers 1.1.1.1"` |
 
@@ -33,7 +33,7 @@ This example get one certificate for `*.example.com` and `example.com` using clo
 version: "3"
 services:
   lego:
-    image: brahmadev/acme-lego-cron:latest
+    image: zen3515/acme-lego-cron:latest
     environment:
       STAGING: 1
       DOMAINS: "example.com;*.example.com"
@@ -41,6 +41,23 @@ services:
       CLOUDFLARE_DNS_API_TOKEN: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
       PROVIDER: cloudflare
       LEGO_ARGS: "--dns.disable-cp --dns.resolvers 1.1.1.1"
+    volumes:
+      - "letsencrypt:/letsencrypt"
+```
+
+```yaml
+version: "3"
+services:
+  lego:
+    image: zen3515/acme-lego-cron:latest
+    environment:
+      STAGING: 1
+      # Use ; separate
+      DOMAINS: "example.com;*.example.com"
+      EMAIL_ADDRESS: user@example.com
+      PROVIDER: acme-dns
+      ACME_DNS_API_BASE: https://auth.acme.io:443
+      ACME_DNS_STORAGE_PATH: /letsencrypt/lego-acme-dns-accounts.json
     volumes:
       - "letsencrypt:/letsencrypt"
 ```

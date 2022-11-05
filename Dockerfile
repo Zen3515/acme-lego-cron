@@ -1,6 +1,6 @@
 # Dockerfile: https://hub.docker.com/r/goacme/lego/
-ARG VERSION
-FROM goacme/lego:${VERSION}
+ARG LEGO_VERSION
+FROM goacme/lego:${LEGO_VERSION}
 
 LABEL maintainer="me@brahma.world"
 
